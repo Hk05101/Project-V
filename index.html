@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Info Extractor</title>
+</head>
+
+<body>
+    <h1>Upload a Video</h1>
+    <form id="videoForm">
+        <div> <input type="file" id="videoInput" accept="video/*" required></div>
+        <br>
+        <div><button type="submit">Submit</button></div>
+    </form>
+    <table id="videoInfoTable" style="display: none;">
+        <tr>
+            <th>Property</th>
+            <th>Value</th>
+        </tr>
+        <tr>
+            <td>File Name</td>
+            <td id="fileName"></td>
+        </tr>
+        <tr>
+            <td>File Size</td>
+            <td id="fileSize"></td>
+        </tr>
+        <tr>
+            <td>Duration</td>
+            <td id="duration"></td>
+        </tr>
+        <tr>
+            <td>Video Width</td>
+            <td id="videoWidth"></td>
+        </tr>
+        <tr>
+            <td>Video Height</td>
+            <td id="videoHeight"></td>
+        </tr>
+    </table>
+
+    <script>
+        document.getElementById('videoForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const fileInput = document.getElementById('videoInput');
+            const file = fileInput.files[0];
+
+            if (file) {
+                const video = document.createElement('video');
+                const objectURL = URL.createObjectURL(file);
+
+                video.addEventListener('loadedmetadata', function () {
+                    document.getElementById('fileName').innerText = file.name;
+                    document.getElementById('fileSize').innerText = (file.size / (1024 * 1024)).toFixed(2) + ' MB';
+                    document.getElementById('duration').innerText = video.duration.toFixed(2) + ' seconds';
+                    document.getElementById('videoWidth').innerText = video.videoWidth + ' pixels';
+                    document.getElementById('videoHeight').innerText = video.videoHeight + ' pixels';
+
+                    document.getElementById('videoInfoTable').style.display = 'table';
+                });
+
+                video.src = objectURL;
+            }
+        });
+    </script>
+</body>
+
+</html>
